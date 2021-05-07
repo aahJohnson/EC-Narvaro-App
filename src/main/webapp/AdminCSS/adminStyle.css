@@ -1,0 +1,20 @@
+@charset "ISO-8859-1";
+
+main {
+  margin-top: 250px;
+  margin-left: 0;
+  text-align: center;
+}
+
+#settings {
+  background-color: #ffffff;
+  color: black;
+  max-width: 20px;
+  max-height: 20px;
+}
+
+.table {
+  position: relative;
+  margin-top: 100px;
+  bottom: 0;
+}
