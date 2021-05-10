@@ -1,6 +1,13 @@
 package Controller;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,15 +16,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import Bean.CourseBean;
+import Bean.LektionBean;
 import Bean.LoginBean;
+import Bean.NarvaroBean;
+import Bean.PersonBean;
+import ConDB.narvaroDAO;
 import ConDB.userDAO;
 
-/**
- * Servlet implementation class login
- */
+
 @WebServlet("/Login")
 public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	userDAO user = new userDAO();
 
 	public Login() {
 		super();
@@ -44,6 +55,7 @@ public class Login extends HttpServlet {
 			if (login.getUserType().equals("Student")) {
 				HttpSession session = request.getSession();
 				session.setAttribute("user", login);
+
 				destPage = "/StudentServlet";
 			} else if (login.getUserType().equals("Utbildningsledare")) {
 				HttpSession session = request.getSession();
@@ -61,5 +73,22 @@ public class Login extends HttpServlet {
 		}
 
 		request.getRequestDispatcher(destPage).forward(request, response);
+	}
+
+	public static int getUserId(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		String email = request.getParameter("email");
+
+		String password = request.getParameter("password");
+
+		userDAO useDao = new userDAO();
+
+		LoginBean usersId = useDao.checkLogin(email, password);
+		
+		request.setAttribute("userId", usersId.getUsers_id());
+
+		return usersId.getUsers_id();
+
 	}
 }

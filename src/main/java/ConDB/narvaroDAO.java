@@ -29,18 +29,19 @@ public class narvaroDAO {
 		final String dbPassword = "";
 
 		try {
+
 			// driver path
 			Class.forName("com.mysql.cj.jdbc.Driver");
 
 			con = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
 
-			// check connection
-			if (con == null) {
-				System.out.println("JDBC connection is not established");
-
-			} else {
-				// System.out.println("Connection Successfully");
-			}
+//			// check connection
+//			if (con == null) {
+//				System.out.println("JDBC connection is not established");
+//
+//			} else {
+//				System.out.println("Connection Successfully");
+//			}
 
 		} catch (SQLException e) {
 			System.out.println("SQLException: " + e.getMessage());
@@ -49,9 +50,11 @@ public class narvaroDAO {
 		} catch (Exception ex) {
 			// handle the error of the dirver
 			System.out.println("Exception Driver: " + ex);
+
 		}
 
 		return con;
+
 	}
 
 	// HOI
@@ -59,10 +62,12 @@ public class narvaroDAO {
 
 		PersonBean perBean = null;
 		LektionBean lekBean = null;
+		CourseBean courseBean = null;
+
 		ArrayList<NarvaroBean> list = new ArrayList<NarvaroBean>();
 
 		try {
-			query = "SELECT p.PersonId, l.lekId, l.datum, l.Minuter, k.KursId, n.Andel FROM person p INNER JOIN narvaro n ON p.PersonId = n.PersonId "
+			query = "SELECT p.PersonId, l.lekId, l.datum, l.Minuter, k.kursId, n.Andel FROM person p INNER JOIN narvaro n ON p.PersonId = n.PersonId "
 					+ "INNER JOIN lektion l ON l.lekId = n.lekId INNER JOIN kurs k ON k.KursId = l.KursId";
 
 			con = connect();
@@ -75,19 +80,24 @@ public class narvaroDAO {
 				NarvaroBean narvaro = new NarvaroBean();
 				perBean = new PersonBean();
 				lekBean = new LektionBean();
-				//perBean.setFirstName(rs.getString("firstName"));
+				courseBean = new CourseBean();
+//				perBean.setFirstName(rs.getString("firstName"));
 //				perBean.setLastName(rs.getString("lastName"));
 				perBean.setPersonId(rs.getInt("personId"));
 				lekBean.setLekId(rs.getInt("lekId"));
 				lekBean.setMinuter(rs.getInt("minuter"));
 				lekBean.setDatum(rs.getDate("datum"));
-				lekBean.setKursId(rs.getInt("KursId"));
+				lekBean.setKursId(rs.getInt("kursId"));
 				narvaro.setAndel(rs.getInt("andel"));
-
+				
 				narvaro.setPerson(perBean);
 				narvaro.setLektion(lekBean);
 				list.add(narvaro);
+
 			}
+			
+			rs.close();
+			con.close();
 
 		} catch (SQLException e) {
 			System.out.println("SQLException: " + e.getMessage());
@@ -96,6 +106,7 @@ public class narvaroDAO {
 		}
 
 		return list;
+
 	}
 
 	public ArrayList<CourseBean> kurs() {
@@ -121,6 +132,9 @@ public class narvaroDAO {
 				listKurs.add(kurs);
 
 			}
+			
+			rs.close();
+			con.close();
 
 		} catch (SQLException e) {
 			System.out.println("SQLException: " + e.getMessage());
@@ -128,6 +142,7 @@ public class narvaroDAO {
 			System.out.println("VendorError: " + e.getErrorCode());
 		}
 		return listKurs;
+
 	}
 
 	public ArrayList<LektionBean> lektionBeans() {
@@ -153,7 +168,11 @@ public class narvaroDAO {
 				lekBean.setLekId(rs.getInt("lekId"));
 				lekBean.setMinuter(rs.getInt("minuter"));
 				lessons.add(lekBean);
+
 			}
+			
+			rs.close();
+			con.close();
 
 		} catch (SQLException e) {
 			System.out.println("SQLException: " + e.getMessage());
@@ -162,31 +181,76 @@ public class narvaroDAO {
 		}
 
 		return lessons;
-	}
 
-	public boolean updateAttendance(NarvaroBean bean) {
+	}
+	
+	public LektionBean lessonId(int id) {
+		
+		LektionBean lesson = null;
+		
+		
+		try {
+			
+			query = "SELECT * FROM lektion WHERE lekId = ?";
+			con = connect();
+			stmt = con.prepareStatement(query);
+			
+			stmt.setInt(1, id);
+			
+			rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				 lesson = new LektionBean();
+				
+				lesson.setLekId(rs.getInt("lekId"));
+				lesson.setMinuter(rs.getInt("Mintuer"));
+			}
+			
+			rs.close();
+			con.close();
+			
+		}catch (SQLException e) {
+			System.out.println("SQLException: " + e.getMessage());
+			System.out.println("SQLState: " + e.getSQLState());
+			System.out.println("VendorError: " + e.getErrorCode());
+		}
+		return lesson;
+		
+		
+		
+	}
+	
+	
+	public boolean updateAttendance(int personId, int lessonId, int attendance) {
+		
 		
 		try {
 			
 			query = "UPDATE narvaro SET Andel = ? WHERE PersonId = ? AND lekId = ?";
-			
 			con = connect();
 			stmt = con.prepareStatement(query);
 			
-			stmt.setInt(1, bean.getAndel());
-			stmt.setInt(2, bean.getPerson().getPersonId());
-			stmt.setInt(3, bean.getLektion().getLekId());
+			stmt.setInt(1, attendance);
+			stmt.setInt(2, personId);
+			stmt.setInt(3, lessonId);
 			
 			stmt.executeUpdate();
 			
+			con.close();
+			
 			return true;
+			
 			
 		} catch (SQLException e) {
 			System.out.println("SQLException: " + e.getMessage());
 			System.out.println("SQLState: " + e.getSQLState());
 			System.out.println("VendorError: " + e.getErrorCode());
 		}
-
+		
+	
 		return false;
+		
+		
 	}
+
 }

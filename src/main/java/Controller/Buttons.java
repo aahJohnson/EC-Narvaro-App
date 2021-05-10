@@ -7,23 +7,35 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/adminPage")
-public class adminPage extends HttpServlet {
+@WebServlet("/Buttons")
+public class Buttons extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
-    public adminPage() {
+       
+  
+    public Buttons() {
         super();
+        // TODO Auto-generated constructor stub
     }
 
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		
+		StudentServlet student = new StudentServlet();
+		student.kurs(request, response);
+		student.lektion(request, response);
+		//student.lessonAttendance(request, response);
+		
+		//student.registerAttendance(request, response);
+		
+		request.getRequestDispatcher("StudentPage/index.jsp").forward(request, response);
 
+	
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		String overview = request.getParameter("overview");
-		
-		
+		// TODO Auto-generated method stub
+		//doGet(request, response);
 	}
 
 }

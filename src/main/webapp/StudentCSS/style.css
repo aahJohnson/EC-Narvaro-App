@@ -25,6 +25,7 @@ p {
 .white-bg {
   position: absolute;
   top: 0;
+  background-image: url("ocean.jpg");
   background-color: #fff;
   min-height: 500px;
   margin: 210px 0px;

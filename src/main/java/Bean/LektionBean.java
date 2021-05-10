@@ -1,5 +1,6 @@
 package Bean;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class LektionBean {
@@ -9,7 +10,7 @@ public class LektionBean {
 	private int kursId;
 	private int minuter;
 	
-	
+
 	public int getMinuter() {
 		return minuter;
 	}
@@ -40,5 +41,10 @@ public class LektionBean {
 	
 	public void setKursId(int kursId) {
 		this.kursId = kursId;
+	}
+
+	@Override
+	public String toString() {
+		return "LektionBean [lekId=" + lekId + ", datum=" + datum + ", kursId=" + kursId + ", minuter=" + minuter + "]";
 	}
 }
