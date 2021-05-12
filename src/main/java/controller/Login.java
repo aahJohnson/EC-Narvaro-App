@@ -1,4 +1,4 @@
-package Controller;
+package controller;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -21,8 +21,8 @@ import Bean.LektionBean;
 import Bean.LoginBean;
 import Bean.NarvaroBean;
 import Bean.PersonBean;
-import ConDB.narvaroDAO;
-import ConDB.userDAO;
+import conDB.narvaroDAO;
+import conDB.userDAO;
 
 
 @WebServlet("/Login")
@@ -37,6 +37,7 @@ public class Login extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -55,6 +56,7 @@ public class Login extends HttpServlet {
 			if (login.getUserType().equals("Student")) {
 				HttpSession session = request.getSession();
 				session.setAttribute("user", login);
+				
 
 				destPage = "/StudentServlet";
 			} else if (login.getUserType().equals("Utbildningsledare")) {
@@ -73,22 +75,9 @@ public class Login extends HttpServlet {
 		}
 
 		request.getRequestDispatcher(destPage).forward(request, response);
-	}
-
-	public static int getUserId(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		String email = request.getParameter("email");
-
-		String password = request.getParameter("password");
-
-		userDAO useDao = new userDAO();
-
-		LoginBean usersId = useDao.checkLogin(email, password);
-		
-		request.setAttribute("userId", usersId.getUsers_id());
-
-		return usersId.getUsers_id();
 
 	}
+
+
+
 }

@@ -1,4 +1,4 @@
-package ConDB;
+package conDB;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -35,13 +35,13 @@ public class narvaroDAO {
 
 			con = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
 
-//			// check connection
-//			if (con == null) {
-//				System.out.println("JDBC connection is not established");
-//
-//			} else {
-//				System.out.println("Connection Successfully");
-//			}
+			// check connection
+			if (con == null) {
+				System.out.println("JDBC connection is not established");
+
+			} else {
+				System.out.println("Connection Successfully");
+			}
 
 		} catch (SQLException e) {
 			System.out.println("SQLException: " + e.getMessage());
@@ -67,7 +67,7 @@ public class narvaroDAO {
 		ArrayList<NarvaroBean> list = new ArrayList<NarvaroBean>();
 
 		try {
-			query = "SELECT p.PersonId, l.lekId, l.datum, l.Minuter, k.kursId, n.Andel FROM person p INNER JOIN narvaro n ON p.PersonId = n.PersonId "
+			query = "SELECT p.PersonId PersonId, l.lekId LekId, l.datum Datum, l.Minuter Minuter, k.kursId KursId, n.Andel Andel FROM person p INNER JOIN narvaro n ON p.PersonId = n.PersonId "
 					+ "INNER JOIN lektion l ON l.lekId = n.lekId INNER JOIN kurs k ON k.KursId = l.KursId";
 
 			con = connect();
@@ -83,12 +83,12 @@ public class narvaroDAO {
 				courseBean = new CourseBean();
 //				perBean.setFirstName(rs.getString("firstName"));
 //				perBean.setLastName(rs.getString("lastName"));
-				perBean.setPersonId(rs.getInt("personId"));
-				lekBean.setLekId(rs.getInt("lekId"));
-				lekBean.setMinuter(rs.getInt("minuter"));
-				lekBean.setDatum(rs.getDate("datum"));
-				lekBean.setKursId(rs.getInt("kursId"));
-				narvaro.setAndel(rs.getInt("andel"));
+				perBean.setPersonId(rs.getInt("PersonId"));
+				lekBean.setLekId(rs.getInt("LekId"));
+				lekBean.setMinuter(rs.getInt("Minuter"));
+				lekBean.setDatum(rs.getDate("Datum"));
+				lekBean.setKursId(rs.getInt("KursId"));
+				narvaro.setAndel(rs.getInt("Andel"));
 				
 				narvaro.setPerson(perBean);
 				narvaro.setLektion(lekBean);

@@ -1,4 +1,4 @@
-package ConDB;
+package conDB;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -125,6 +125,5 @@ public class userDAO {
 		}
 
 		return user;
-
 	}
 }

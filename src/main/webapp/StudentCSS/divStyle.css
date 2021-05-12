@@ -1,11 +1,10 @@
 @charset "ISO-8859-1";
 
-.container{
-	text-align: center;
-	margin-top: 300px;
+.container {
+  text-align: center;
+  margin-top: 300px;
 }
 
-.attendanceButtons{
-	border: 3px solid blue;
-	
+.attendanceButtons {
+  border: 3px solid yellow;
 }

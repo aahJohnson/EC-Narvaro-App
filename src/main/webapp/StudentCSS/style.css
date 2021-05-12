@@ -25,14 +25,13 @@ p {
 .white-bg {
   position: absolute;
   top: 0;
-  background-image: url("ocean.jpg");
   background-color: #fff;
   min-height: 500px;
   margin: 210px 0px;
   width: 100vw;
   height: 100vh;
   -webkit-transform: skewY(5deg);
-          transform: skewY(5deg);
+  transform: skewY(5deg);
   z-index: -1;
 }
 
@@ -47,9 +46,3 @@ p {
 .shadow {
   box-shadow: -2px -5px 5px 0px rgba(0, 0, 0, 0.3);
 }
-
-
-
-
-
-

@@ -1,8 +1,13 @@
-function attending() {
-  alert("alert");
-  var attendingValue = 1;
-}
-function notAttending() {
-  var attendingValue = 2;
-  StudentServlet.registerAttendance();
+function setAttentionPercentage(userId, attentionPercentage) {
+	var xhttp = null;
+
+	xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			location.reload();
+		}
+	};
+	xhttp.open("GET", "StudentServlet?abcde=" + userId + "&attentionPercentage=" + attentionPercentage, true);
+	xhttp.send();
+
 }
