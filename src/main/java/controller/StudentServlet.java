@@ -11,8 +11,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import Bean.CourseBean;
-import Bean.LektionBean;
+import Bean.LessonBean;
 import Bean.LoginBean;
 import Bean.NarvaroBean;
 import conDB.narvaroDAO;
@@ -33,7 +34,7 @@ public class StudentServlet extends HttpServlet {
 		if (request.getParameter("attentionPercentage") != null) {
 			setAttendance(request, response);
 		} else if (request.getParameter("activeLessonId") != null) {
-			changeLessonDate(request, response);
+			printCurrentLesson(request, response);
 		}
 	}
 
@@ -41,9 +42,9 @@ public class StudentServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		// currentLesson();
-		// printCurrentLesson(request, response);
+		//printCurrentLesson(request, response);
 		printCurrentCourseId(request, response);
-		narvaroPerson(request, response);
+		courseAttendance(request, response);
 		showLessonDate(request, response);
 		lessonAttendance(request, response);
 		// changeLessonDate(request, response);
@@ -52,13 +53,15 @@ public class StudentServlet extends HttpServlet {
 
 	}
 
+	// Course
+	
 	public CourseBean getCurrentCourse() throws ServletException, IOException {
 
 		CourseBean course = null;
 
 		narvaroDAO naDao = new narvaroDAO();
 
-		ArrayList<CourseBean> kursList = naDao.kurs();
+		ArrayList<CourseBean> kursList = naDao.courses();
 
 		Date date = new Date();
 
@@ -73,80 +76,27 @@ public class StudentServlet extends HttpServlet {
 		return course;
 	}
 
-	public Date currentLesson() throws ServletException, IOException {
-
-		narvaroDAO naDao = new narvaroDAO();
-
-		ArrayList<LektionBean> lessons = naDao.lektionBeans();
-
-		Date currentDate = new Date();
-
-		SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyy");
-
-		try {
-			currentDate = dateFormatter.parse(dateFormatter.format(new Date()));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		Date aktuell = null;
-
-		for (LektionBean lesson : lessons) {
-
-			if (lesson.getDatum().equals(currentDate)) {
-
-				aktuell = lesson.getDatum();
-				break;
-			}
-
-		}
-
-		return aktuell;
-
-	}
-
-	public void printCurrentLesson(HttpServletRequest request, HttpServletResponse response)
+	public void courseAttendance(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		Date printLesson = currentLesson();
-		System.out.println(printLesson);
+		double totalAttention = calcTotalParticipation(getUserId(request, response)) * 100;
 
-		if (printLesson != null) {
-			request.setAttribute("lektion", printLesson);
+		request.setAttribute("narvaro", (int) totalAttention);
+
+		CourseBean currentCourse = getCurrentCourse();
+
+		if (currentCourse != null) {
+			double courseAttention = calcTotalParticipationCourse(getUserId(request, response),
+					currentCourse.getKursId()) * 100;
+
+			request.setAttribute("courseName", currentCourse.getKursNamn());
+			request.setAttribute("course", (int) courseAttention);
 		} else {
-			String message = "Ingen aktiv lektion";
-			request.setAttribute("lektion", message);
+			String message = "Ingen aktiv kurs";
+			request.setAttribute("courseName", message);
 		}
 	}
-
-	public double calcTotalParticipation(int userId) {
-
-		narvaroDAO naDao = new narvaroDAO();
-
-		ArrayList<NarvaroBean> andel = naDao.narvaroPerson();
-
-		double totalParticipation = 0.0;
-		double totalMinutes = 0.0;
-
-		Date date = new Date();
-
-		for (NarvaroBean narvaroBean : andel) {// totala närvaro
-
-			if (narvaroBean.getPerson().getPersonId() == userId) {
-
-				if (narvaroBean.getLektion().getDatum().compareTo(date) <= 0) {
-
-					totalParticipation = totalParticipation + narvaroBean.getAndel();
-					totalMinutes = totalMinutes + narvaroBean.getLektion().getMinuter();
-				}
-			}
-		}
-
-		return totalParticipation / totalMinutes;
-
-	}
-
+	
 	public double calcTotalParticipationCourse(int userId, int courseId) throws ServletException, IOException {
 
 		narvaroDAO naDao = new narvaroDAO();
@@ -178,43 +128,93 @@ public class StudentServlet extends HttpServlet {
 		return totalParticipation / totalMinutes;
 
 	}
+	
+	public int currentCourseId() throws ServletException, IOException {
 
-	public void narvaroPerson(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+		narvaroDAO naDao = new narvaroDAO();
 
-		double totalAttention = calcTotalParticipation(getUserId(request, response)) * 100;
+		ArrayList<CourseBean> kursList = naDao.courses();
 
-		request.setAttribute("narvaro", (int) totalAttention);
+		Date date = new Date();
+		CourseBean aktuell = null;
 
-		CourseBean currentCourse = getCurrentCourse();
+		for (CourseBean kurs : kursList) {
 
-		if (currentCourse != null) {
-			double courseAttention = calcTotalParticipationCourse(getUserId(request, response),
-					currentCourse.getKursId()) * 100;
-
-			request.setAttribute("kurs", currentCourse.getKursNamn());
-			request.setAttribute("course", (int) courseAttention);
-		} else {
-			String message = "Ingen aktiv kurs";
-			request.setAttribute("kurs", message);
+			if (kurs.getStartDatum().compareTo(date) < 0 && kurs.getSlutDatum().compareTo(date) > 0) {
+				aktuell = kurs;
+				break;
+			}
 		}
+
+		return aktuell.getKursId();
+
 	}
 
-	public int getUserId(HttpServletRequest request, HttpServletResponse response)
+	public void printCurrentCourseId(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String email = request.getParameter("email");
+		Integer printCourseId = currentCourseId();
 
-		String password = request.getParameter("password");
+		if (printCourseId != null) {
+			request.setAttribute("currentCourse", printCourseId);
+		} else {
+			String message = "Ingen aktiv kurs";
+			request.setAttribute("currentCourse", message);
+		}
 
-		userDAO useDao = new userDAO();
+	}
+	
+	// Lesson
+	
+	public Date currentLesson() throws ServletException, IOException {
 
-		LoginBean usersId = useDao.checkLogin(email, password);
+		narvaroDAO naDao = new narvaroDAO();
 
-		request.setAttribute("userId", usersId.getUsers_id());
+		ArrayList<LessonBean> lessons = naDao.lessions();
 
-		return usersId.getUsers_id();
+		Date currentDate = new Date();
 
+		SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyy");
+
+		try {
+			currentDate = dateFormatter.parse(dateFormatter.format(new Date()));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		Date aktuell = null;
+
+		for (LessonBean lesson : lessons) {
+
+			if (lesson.getDatum().equals(currentDate)) {
+
+				aktuell = lesson.getDatum();
+				break;
+			}
+
+		}
+
+		return aktuell;
+
+	}
+
+	public void printCurrentLesson(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		if (request.getParameter("activeLessonId") != null) {
+			Date printLesson = changeLessonDate(request, response);
+			System.out.println("lesson id is " + printLesson);
+			
+			request.setAttribute("lessonDate", printLesson);
+
+//			if (printLesson != null) {
+//				request.setAttribute("lektion", "abcde");
+//			} else {
+//				String message = "Ingen aktiv lektion";
+//				request.setAttribute("lektion", message);
+//			}
+		}
 	}
 
 	public void lessonAttendance(HttpServletRequest request, HttpServletResponse response)
@@ -249,42 +249,7 @@ public class StudentServlet extends HttpServlet {
 		request.setAttribute("lessonAttendance", filteredLesson);
 
 	}
-
-	public int currentCourseId() throws ServletException, IOException {
-
-		narvaroDAO naDao = new narvaroDAO();
-
-		ArrayList<CourseBean> kursList = naDao.kurs();
-
-		Date date = new Date();
-		CourseBean aktuell = null;
-
-		for (CourseBean kurs : kursList) {
-
-			if (kurs.getStartDatum().compareTo(date) < 0 && kurs.getSlutDatum().compareTo(date) > 0) {
-				aktuell = kurs;
-				break;
-			}
-		}
-
-		return aktuell.getKursId();
-
-	}
-
-	public void printCurrentCourseId(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		Integer printCourseId = currentCourseId();
-
-		if (printCourseId != null) {
-			request.setAttribute("currentCourse", printCourseId);
-		} else {
-			String message = "Ingen aktiv kurs";
-			request.setAttribute("currentCourse", message);
-		}
-
-	}
-
+	
 	public void showLessonDate(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -306,6 +271,88 @@ public class StudentServlet extends HttpServlet {
 
 		request.setAttribute("dateLesson", filteredDate);
 	}
+	
+	public Date changeLessonDate(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+//		SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyy");
+//
+//		try {
+//			lessonDate = dateFormatter.parse(dateFormatter.format(new Date()));
+//		} catch (ParseException e) {
+//
+//			e.printStackTrace();
+//		}
+
+		Date lessonDate = new Date();
+
+		String idActive = request.getParameter("activeLessonId");
+
+		narvaroDAO narvaroDaoInstance = new narvaroDAO();
+
+		ArrayList<NarvaroBean> allLessons = narvaroDaoInstance.narvaroPerson();
+
+		for (NarvaroBean lesson : allLessons) {
+
+			if (lesson.getLektion().getLekId() == Integer.parseInt(idActive)) {
+
+				lessonDate = lesson.getLektion().getDatum();
+				System.out.println("lessonDate: " + lessonDate);
+				break;
+			}
+		}
+
+		return lessonDate;
+	}
+	
+	// Total attendance
+	
+	public double calcTotalParticipation(int userId) {
+
+		narvaroDAO naDao = new narvaroDAO();
+
+		ArrayList<NarvaroBean> andel = naDao.narvaroPerson();
+
+		double totalParticipation = 0.0;
+		double totalMinutes = 0.0;
+
+		Date date = new Date();
+
+		for (NarvaroBean narvaroBean : andel) {// totala närvaro
+
+			if (narvaroBean.getPerson().getPersonId() == userId) {
+
+				if (narvaroBean.getLektion().getDatum().compareTo(date) <= 0) {
+
+					totalParticipation = totalParticipation + narvaroBean.getAndel();
+					totalMinutes = totalMinutes + narvaroBean.getLektion().getMinuter();
+				}
+			}
+		}
+
+		return totalParticipation / totalMinutes;
+
+	}
+
+	public int getUserId(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		String email = request.getParameter("email");
+
+		String password = request.getParameter("password");
+
+		userDAO useDao = new userDAO();
+
+		LoginBean usersId = useDao.checkLogin(email, password);
+
+		request.setAttribute("userId", usersId.getUsers_id());
+
+		return usersId.getUsers_id();
+
+	}
+
+	
+
 
 	public void setAttendance(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -335,49 +382,5 @@ public class StudentServlet extends HttpServlet {
 				}
 			}
 		}
-	}
-
-	public Date changeLessonDate(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		int attendanceMinutes = 0;
-
-		Date lessonDate = new Date();
-		
-//		SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyy");
-//
-//		try {
-//			activeLesson = dateFormatter.parse(dateFormatter.format(new Date()));
-//		} catch (ParseException e) {
-//
-//			e.printStackTrace();
-//		}
-
-		String changeActiveLesson = request.getParameter("activeLessonId");
-
-		narvaroDAO narvaroDaoInstance = new narvaroDAO();
-
-		ArrayList<NarvaroBean> allLessons = narvaroDaoInstance.narvaroPerson();
-
-		for (NarvaroBean lesson : allLessons) {
-
-			if (changeActiveLesson != null) {
-
-				int lessonId = Integer.parseInt(changeActiveLesson);
-
-				if (lesson.getLektion().getLekId() == lessonId) {
-
-					attendanceMinutes = 120;
-
-					narvaroDaoInstance.updateAttendance(lesson.getPerson().getPersonId(),
-							lesson.getLektion().getLekId(), attendanceMinutes);
-
-					lessonDate = lesson.getLektion().getDatum();
-
-				}
-			}
-		}
-
-		return lessonDate;
 	}
 }

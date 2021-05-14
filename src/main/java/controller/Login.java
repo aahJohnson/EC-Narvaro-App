@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import Bean.CourseBean;
-import Bean.LektionBean;
+import Bean.LessonBean;
 import Bean.LoginBean;
 import Bean.NarvaroBean;
 import Bean.PersonBean;

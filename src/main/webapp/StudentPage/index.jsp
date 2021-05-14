@@ -37,10 +37,10 @@
 
 	<div class="container">
 
-		<label>Kurs: <%=request.getAttribute("kurs")%></label>
+		<label>Kurs: <%=request.getAttribute("courseName")%></label>
 
 		<div class="attendanceButtons">
-			<label>Lektion: <%=request.getAttribute("lektion")%></label>
+			<label>Lektion: <%=request.getAttribute("lessonDate")%></label>
 			 <br> <label>Närvaro:
 				<button type="submit" name="attending" onclick="setAttentionPercentage(${user.users_id}, 100)">Närvaro</button>
 			
@@ -50,7 +50,7 @@
 				<button type="submit" name="absent"
 					onclick="setAttentionPercentage(${user.users_id}, 0)">Frånvarande</button>
 
-				<button type="submit" name="childcare" onclick="setAttentionPercentage(${user.users_id}, 0)">Vård av barn</button> 
+				<button type="submit" name="childcare" onclick="setAttentionPercentage(${user.users_id}, 0)">Vård av barn</button>
 					
 				<select id="items" onchange="setAttentionPercentage(${user.users_id}, this.value)">
 				<option value="0">Välj procent</option>
@@ -68,7 +68,6 @@
 
 			<!-- The value for `for=""` and `id=""` has to be same. -->
 
-
 			<select id="items">
 				<option value="item-0"></option>
 				<option value="item-1">Item 1</option>
@@ -77,7 +76,6 @@
 				<option value="item-4">Item 4</option>
 			</select>
 		</div>
-
 
 		<label>Namn: ${user.firstName } ${user.lastName } </label> <label>Total
 			Total Närvaro: <%=request.getAttribute("narvaro")%>%
@@ -109,9 +107,6 @@
 
 			</tbody>
 		</table>
-
-
-
 
 		<form action="<%=request.getContextPath()%>/Logout" method="get">
 

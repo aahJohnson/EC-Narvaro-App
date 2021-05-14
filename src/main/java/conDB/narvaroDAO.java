@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import Bean.LektionBean;
+import Bean.LessonBean;
 import Bean.NarvaroBean;
 import Bean.PersonBean;
 import Bean.CourseBean;
@@ -20,7 +20,6 @@ public class narvaroDAO {
 	static ResultSet rs = null;
 	static String query = null;
 
-	// ADAM
 	public Connection connect() {
 
 		// variables
@@ -49,11 +48,10 @@ public class narvaroDAO {
 
 	}
 
-	// HOI
 	public ArrayList<NarvaroBean> narvaroPerson() {
 
 		PersonBean perBean = null;
-		LektionBean lekBean = null;
+		LessonBean lekBean = null;
 		CourseBean courseBean = null;
 
 		ArrayList<NarvaroBean> list = new ArrayList<NarvaroBean>();
@@ -71,7 +69,7 @@ public class narvaroDAO {
 			while (rs.next()) {
 				NarvaroBean narvaro = new NarvaroBean();
 				perBean = new PersonBean();
-				lekBean = new LektionBean();
+				lekBean = new LessonBean();
 				courseBean = new CourseBean();
 //				perBean.setFirstName(rs.getString("firstName"));
 //				perBean.setLastName(rs.getString("lastName"));
@@ -101,11 +99,11 @@ public class narvaroDAO {
 
 	}
 
-	public ArrayList<CourseBean> kurs() {
+	public ArrayList<CourseBean> courses() {
 
-		ArrayList<CourseBean> listKurs = new ArrayList<CourseBean>();
+		ArrayList<CourseBean> courseList = new ArrayList<CourseBean>();
 
-		CourseBean kurs = null;
+		CourseBean courseBeanInstance = null;
 
 		try {
 
@@ -116,12 +114,12 @@ public class narvaroDAO {
 			rs = stmt.executeQuery();
 
 			while (rs.next()) {
-				kurs = new CourseBean();
-				kurs.setKursId(rs.getInt("KursId"));
-				kurs.setKursNamn(rs.getString("KursNamn"));
-				kurs.setStartDatum(rs.getDate("startDatum"));
-				kurs.setSlutDatum(rs.getDate("slutDatum"));
-				listKurs.add(kurs);
+				courseBeanInstance = new CourseBean();
+				courseBeanInstance.setKursId(rs.getInt("KursId"));
+				courseBeanInstance.setKursNamn(rs.getString("KursNamn"));
+				courseBeanInstance.setStartDatum(rs.getDate("startDatum"));
+				courseBeanInstance.setSlutDatum(rs.getDate("slutDatum"));
+				courseList.add(courseBeanInstance);
 
 			}
 			
@@ -133,15 +131,15 @@ public class narvaroDAO {
 			System.out.println("SQLState: " + e.getSQLState());
 			System.out.println("VendorError: " + e.getErrorCode());
 		}
-		return listKurs;
+		return courseList;
 
 	}
 
-	public ArrayList<LektionBean> lektionBeans() {
+	public ArrayList<LessonBean> lessions() {
 
-		ArrayList<LektionBean> lessons = new ArrayList<LektionBean>();
+		ArrayList<LessonBean> lessons = new ArrayList<LessonBean>();
 
-		LektionBean lekBean = null;
+		LessonBean lessionBeanInstance = null;
 
 		try {
 
@@ -154,12 +152,12 @@ public class narvaroDAO {
 			rs = stmt.executeQuery();
 
 			while (rs.next()) {
-				lekBean = new LektionBean();
-				lekBean.setDatum(rs.getDate("datum"));
-				lekBean.setKursId(rs.getInt("kursId"));
-				lekBean.setLekId(rs.getInt("lekId"));
-				lekBean.setMinuter(rs.getInt("minuter"));
-				lessons.add(lekBean);
+				lessionBeanInstance = new LessonBean();
+				lessionBeanInstance.setDatum(rs.getDate("datum"));
+				lessionBeanInstance.setKursId(rs.getInt("kursId"));
+				lessionBeanInstance.setLekId(rs.getInt("lekId"));
+				lessionBeanInstance.setMinuter(rs.getInt("minuter"));
+				lessons.add(lessionBeanInstance);
 
 			}
 			
@@ -176,9 +174,9 @@ public class narvaroDAO {
 
 	}
 	
-	public LektionBean lessonId(int id) {
+	public LessonBean lessonId(int id) {
 		
-		LektionBean lesson = null;
+		LessonBean lesson = null;
 		
 		
 		try {
@@ -192,7 +190,7 @@ public class narvaroDAO {
 			rs = stmt.executeQuery();
 			
 			while(rs.next()) {
-				 lesson = new LektionBean();
+				 lesson = new LessonBean();
 				
 				lesson.setLekId(rs.getInt("lekId"));
 				lesson.setMinuter(rs.getInt("Mintuer"));
@@ -211,7 +209,6 @@ public class narvaroDAO {
 		
 		
 	}
-	
 	
 	public boolean updateAttendance(int personId, int lessonId, int attendance) {
 		

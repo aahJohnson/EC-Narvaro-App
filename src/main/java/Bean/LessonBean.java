@@ -3,7 +3,7 @@ package Bean;
 import java.time.LocalDate;
 import java.util.Date;
 
-public class LektionBean {
+public class LessonBean {
 	
 	private int lekId;
 	private Date datum;

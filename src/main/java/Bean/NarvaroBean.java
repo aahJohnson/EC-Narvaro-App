@@ -3,7 +3,7 @@ package Bean;
 public class NarvaroBean {
 	
 	private PersonBean person;
-	private LektionBean lektion;
+	private LessonBean lektion;
 	private CourseBean course;
 	private int andel;
 	
@@ -23,11 +23,11 @@ public class NarvaroBean {
 		this.person = person;
 	}
 	
-	public LektionBean getLektion() {
+	public LessonBean getLektion() {
 		return lektion;
 	}
 	
-	public void setLektion(LektionBean lektion) {
+	public void setLektion(LessonBean lektion) {
 		this.lektion = lektion;
 	}
 
