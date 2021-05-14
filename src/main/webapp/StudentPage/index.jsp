@@ -40,16 +40,9 @@
 		<label>Kurs: <%=request.getAttribute("kurs")%></label>
 
 		<div class="attendanceButtons">
-			<label>Lektion: <%=request.getAttribute("lektion")%>
-			</label> <br> <label>Närvaro:
+			<label>Lektion: <%=request.getAttribute("lektion")%></label>
+			 <br> <label>Närvaro:
 				<button type="submit" name="attending" onclick="setAttentionPercentage(${user.users_id}, 100)">Närvaro</button>
-					
-				<select id="items" onchange="setAttentionPercentage(${user.users_id}, this.value)">
-				<option value="0">Välj procent</option>
-					<option value="75">75%</option>
-					<option value="50">50%</option>
-					<option value="25">25%</option>
-			</select>
 			
 				<button type="submit" name="sick"
 					onclick="setAttentionPercentage(${user.users_id}, 0)">Sjuk</button>
@@ -59,7 +52,12 @@
 
 				<button type="submit" name="childcare" onclick="setAttentionPercentage(${user.users_id}, 0)">Vård av barn</button> 
 					
-
+				<select id="items" onchange="setAttentionPercentage(${user.users_id}, this.value)">
+				<option value="0">Välj procent</option>
+					<option value="75">75%</option>
+					<option value="50">50%</option>
+					<option value="25">25%</option>
+			</select>
 
 			</label>
 
@@ -81,9 +79,9 @@
 		</div>
 
 
-		<label>Namnet:${user.firstName } ${user.lastName } </label> <label>Total
-			Närvaro:<%=request.getAttribute("narvaro")%>%
-		</label> <label>Kurs Närvaro:<%=request.getAttribute("course")%>%
+		<label>Namn: ${user.firstName } ${user.lastName } </label> <label>Total
+			Total Närvaro: <%=request.getAttribute("narvaro")%>%
+		</label> <label>Kurs Närvaro: <%=request.getAttribute("course")%>%
 		</label>
 
 		<table class="table table-info">
@@ -104,7 +102,7 @@
 					<th scope="row">Lektion</th>
 					<c:forEach items="${lessonAttendance }" var="attendance">
 
-						<td><button type="submit">${attendance }%</button></td>
+						<td><button type="submit" onclick="setLessonId(1)">${attendance }%</button></td>
 
 					</c:forEach>
 				</tr>

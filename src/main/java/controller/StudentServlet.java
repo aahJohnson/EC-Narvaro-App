@@ -11,7 +11,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import Bean.CourseBean;
 import Bean.LektionBean;
 import Bean.LoginBean;
@@ -31,47 +30,23 @@ public class StudentServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String id = request.getParameter("abcde");
-		String attentionPercentage = request.getParameter("attentionPercentage");
-
-		int userId = Integer.parseInt(id);
-		int attentionP = Integer.parseInt(attentionPercentage);
-
-		narvaroDAO narvaroDaoInstance = new narvaroDAO();
-
-		ArrayList<NarvaroBean> narvaroMethod = narvaroDaoInstance.narvaroPerson();
-
-		int attendance;
-
-		for (NarvaroBean lessonMinutes : narvaroMethod) {
-
-			if (lessonMinutes.getLektion().getDatum().equals(currentLesson())) {
-
-				if (lessonMinutes.getPerson().getPersonId() == userId) {
-
-					attendance = lessonMinutes.getLektion().getMinuter() * attentionP / 100;
-					//attendance = 0;
-
-					narvaroDaoInstance.updateAttendance(lessonMinutes.getPerson().getPersonId(),
-							lessonMinutes.getLektion().getLekId(), attendance);
-
-				}
-
-			}
-
+		if (request.getParameter("attentionPercentage") != null) {
+			setAttendance(request, response);
+		} else if (request.getParameter("activeLessonId") != null) {
+			changeLessonDate(request, response);
 		}
-
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
-		currentLesson();
-		printCurrentLesson(request, response);
+
+		// currentLesson();
+		// printCurrentLesson(request, response);
 		printCurrentCourseId(request, response);
 		narvaroPerson(request, response);
 		showLessonDate(request, response);
 		lessonAttendance(request, response);
+		// changeLessonDate(request, response);
 
 		request.getRequestDispatcher("StudentPage/index.jsp").forward(request, response);
 
@@ -111,7 +86,7 @@ public class StudentServlet extends HttpServlet {
 		try {
 			currentDate = dateFormatter.parse(dateFormatter.format(new Date()));
 		} catch (ParseException e) {
-
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -135,6 +110,7 @@ public class StudentServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		Date printLesson = currentLesson();
+		System.out.println(printLesson);
 
 		if (printLesson != null) {
 			request.setAttribute("lektion", printLesson);
@@ -142,7 +118,6 @@ public class StudentServlet extends HttpServlet {
 			String message = "Ingen aktiv lektion";
 			request.setAttribute("lektion", message);
 		}
-
 	}
 
 	public double calcTotalParticipation(int userId) {
@@ -330,7 +305,79 @@ public class StudentServlet extends HttpServlet {
 		}
 
 		request.setAttribute("dateLesson", filteredDate);
-
 	}
 
+	public void setAttendance(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		String id = request.getParameter("userIdNumber");
+		String attentionPercentage = request.getParameter("attentionPercentage");
+
+		int attentionP = Integer.parseInt(attentionPercentage);
+		int userId = Integer.parseInt(id);
+
+		narvaroDAO narvaroDaoInstance = new narvaroDAO();
+
+		ArrayList<NarvaroBean> narvaroMethod = narvaroDaoInstance.narvaroPerson();
+
+		int attendance;
+
+		for (NarvaroBean lessonMinutes : narvaroMethod) {
+
+			if (lessonMinutes.getLektion().getDatum().equals(currentLesson())) {
+
+				if (lessonMinutes.getPerson().getPersonId() == userId) {
+
+					attendance = lessonMinutes.getLektion().getMinuter() * attentionP / 100;
+
+					narvaroDaoInstance.updateAttendance(lessonMinutes.getPerson().getPersonId(),
+							lessonMinutes.getLektion().getLekId(), attendance);
+				}
+			}
+		}
+	}
+
+	public Date changeLessonDate(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		int attendanceMinutes = 0;
+
+		Date lessonDate = new Date();
+		
+//		SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyy");
+//
+//		try {
+//			activeLesson = dateFormatter.parse(dateFormatter.format(new Date()));
+//		} catch (ParseException e) {
+//
+//			e.printStackTrace();
+//		}
+
+		String changeActiveLesson = request.getParameter("activeLessonId");
+
+		narvaroDAO narvaroDaoInstance = new narvaroDAO();
+
+		ArrayList<NarvaroBean> allLessons = narvaroDaoInstance.narvaroPerson();
+
+		for (NarvaroBean lesson : allLessons) {
+
+			if (changeActiveLesson != null) {
+
+				int lessonId = Integer.parseInt(changeActiveLesson);
+
+				if (lesson.getLektion().getLekId() == lessonId) {
+
+					attendanceMinutes = 120;
+
+					narvaroDaoInstance.updateAttendance(lesson.getPerson().getPersonId(),
+							lesson.getLektion().getLekId(), attendanceMinutes);
+
+					lessonDate = lesson.getLektion().getDatum();
+
+				}
+			}
+		}
+
+		return lessonDate;
+	}
 }

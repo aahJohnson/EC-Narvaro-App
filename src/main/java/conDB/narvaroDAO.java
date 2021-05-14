@@ -35,14 +35,6 @@ public class narvaroDAO {
 
 			con = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
 
-			// check connection
-			if (con == null) {
-				System.out.println("JDBC connection is not established");
-
-			} else {
-				System.out.println("Connection Successfully");
-			}
-
 		} catch (SQLException e) {
 			System.out.println("SQLException: " + e.getMessage());
 			System.out.println("SQLState: " + e.getSQLState());
