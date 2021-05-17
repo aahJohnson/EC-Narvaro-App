@@ -1,14 +1,6 @@
 package controller;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,19 +8,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import Bean.CourseBean;
-import Bean.LessonBean;
 import Bean.LoginBean;
-import Bean.NarvaroBean;
-import Bean.PersonBean;
-import conDB.narvaroDAO;
-import conDB.userDAO;
+import conDB.UserDAO;
 
 
 @WebServlet("/Login")
 public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	userDAO user = new userDAO();
+	UserDAO user = new UserDAO();
 
 	public Login() {
 		super();
@@ -46,7 +33,7 @@ public class Login extends HttpServlet {
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 
-		userDAO usDao = new userDAO();
+		UserDAO usDao = new UserDAO();
 
 		LoginBean login = usDao.checkLogin(email, password);
 
@@ -62,6 +49,7 @@ public class Login extends HttpServlet {
 			} else if (login.getUserType().equals("Utbildningsledare")) {
 				HttpSession session = request.getSession();
 				session.setAttribute("user", login);
+				
 				destPage = "AdminPage/index.jsp";
 			} else if (login.getUserType().equals("Lärare")) {
 				HttpSession session = request.getSession();
@@ -77,7 +65,4 @@ public class Login extends HttpServlet {
 		request.getRequestDispatcher(destPage).forward(request, response);
 
 	}
-
-
-
 }

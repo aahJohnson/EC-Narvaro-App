@@ -8,11 +8,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import Bean.LessonBean;
-import Bean.NarvaroBean;
+import Bean.AttendanceBean;
 import Bean.PersonBean;
 import Bean.CourseBean;
 
-public class narvaroDAO {
+public class AttendanceDAO {
 
 	// Declaring the variables
 	static Connection con = null;
@@ -20,6 +20,7 @@ public class narvaroDAO {
 	static ResultSet rs = null;
 	static String query = null;
 
+	// ADAM
 	public Connection connect() {
 
 		// variables
@@ -34,12 +35,20 @@ public class narvaroDAO {
 
 			con = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
 
+//			// check connection
+//			if (con == null) {
+//				System.out.println("JDBC connection is not established");
+//
+//			} else {
+//				System.out.println("Connection Successfully");
+//			}
+
 		} catch (SQLException e) {
 			System.out.println("SQLException: " + e.getMessage());
 			System.out.println("SQLState: " + e.getSQLState());
 			System.out.println("VendorError: " + e.getErrorCode());
 		} catch (Exception ex) {
-			// handle the error of the dirver
+			// handle the error of the driver
 			System.out.println("Exception Driver: " + ex);
 
 		}
@@ -48,13 +57,14 @@ public class narvaroDAO {
 
 	}
 
-	public ArrayList<NarvaroBean> narvaroPerson() {
+	// HOI
+	public ArrayList<AttendanceBean> narvaroPerson() {
 
 		PersonBean perBean = null;
 		LessonBean lekBean = null;
 		CourseBean courseBean = null;
 
-		ArrayList<NarvaroBean> list = new ArrayList<NarvaroBean>();
+		ArrayList<AttendanceBean> list = new ArrayList<AttendanceBean>();
 
 		try {
 			query = "SELECT p.PersonId PersonId, l.lekId LekId, l.datum Datum, l.Minuter Minuter, k.kursId KursId, n.Andel Andel FROM person p INNER JOIN narvaro n ON p.PersonId = n.PersonId "
@@ -67,7 +77,7 @@ public class narvaroDAO {
 			rs = stmt.executeQuery();
 
 			while (rs.next()) {
-				NarvaroBean narvaro = new NarvaroBean();
+				AttendanceBean narvaro = new AttendanceBean();
 				perBean = new PersonBean();
 				lekBean = new LessonBean();
 				courseBean = new CourseBean();
@@ -99,11 +109,11 @@ public class narvaroDAO {
 
 	}
 
-	public ArrayList<CourseBean> courses() {
+	public ArrayList<CourseBean> kurs() {
 
-		ArrayList<CourseBean> courseList = new ArrayList<CourseBean>();
+		ArrayList<CourseBean> listKurs = new ArrayList<CourseBean>();
 
-		CourseBean courseBeanInstance = null;
+		CourseBean kurs = null;
 
 		try {
 
@@ -114,12 +124,12 @@ public class narvaroDAO {
 			rs = stmt.executeQuery();
 
 			while (rs.next()) {
-				courseBeanInstance = new CourseBean();
-				courseBeanInstance.setKursId(rs.getInt("KursId"));
-				courseBeanInstance.setKursNamn(rs.getString("KursNamn"));
-				courseBeanInstance.setStartDatum(rs.getDate("startDatum"));
-				courseBeanInstance.setSlutDatum(rs.getDate("slutDatum"));
-				courseList.add(courseBeanInstance);
+				kurs = new CourseBean();
+				kurs.setKursId(rs.getInt("KursId"));
+				kurs.setKursNamn(rs.getString("KursNamn"));
+				kurs.setStartDatum(rs.getDate("startDatum"));
+				kurs.setSlutDatum(rs.getDate("slutDatum"));
+				listKurs.add(kurs);
 
 			}
 			
@@ -131,15 +141,15 @@ public class narvaroDAO {
 			System.out.println("SQLState: " + e.getSQLState());
 			System.out.println("VendorError: " + e.getErrorCode());
 		}
-		return courseList;
+		return listKurs;
 
 	}
 
-	public ArrayList<LessonBean> lessions() {
+	public ArrayList<LessonBean> lektionBeans() {
 
 		ArrayList<LessonBean> lessons = new ArrayList<LessonBean>();
 
-		LessonBean lessionBeanInstance = null;
+		LessonBean lekBean = null;
 
 		try {
 
@@ -152,12 +162,12 @@ public class narvaroDAO {
 			rs = stmt.executeQuery();
 
 			while (rs.next()) {
-				lessionBeanInstance = new LessonBean();
-				lessionBeanInstance.setDatum(rs.getDate("datum"));
-				lessionBeanInstance.setKursId(rs.getInt("kursId"));
-				lessionBeanInstance.setLekId(rs.getInt("lekId"));
-				lessionBeanInstance.setMinuter(rs.getInt("minuter"));
-				lessons.add(lessionBeanInstance);
+				lekBean = new LessonBean();
+				lekBean.setDatum(rs.getDate("datum"));
+				lekBean.setKursId(rs.getInt("KursId"));
+				lekBean.setLekId(rs.getInt("lekId"));
+				lekBean.setMinuter(rs.getInt("minuter"));
+				lessons.add(lekBean);
 
 			}
 			
@@ -209,6 +219,7 @@ public class narvaroDAO {
 		
 		
 	}
+	
 	
 	public boolean updateAttendance(int personId, int lessonId, int attendance) {
 		

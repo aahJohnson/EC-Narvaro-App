@@ -7,11 +7,11 @@ function setAttentionPercentage(userId, attentionPercentage) {
 			location.reload();
 		}
 	};
-	xhttp.open("GET", "StudentServlet?userIdNumber=" + userId + "&attentionPercentage=" + attentionPercentage, true);
+	xhttp.open("GET", "StudentServlet?userIdNumber=" + userId + "&attendingPercentage=" + attentionPercentage, true);
 	xhttp.send();
 }
 
-function setLessonId(activeLessonId) {
+function date(date){
 	var xhttp = null;
 
 	xhttp = new XMLHttpRequest();
@@ -20,6 +20,6 @@ function setLessonId(activeLessonId) {
 			location.reload();
 		}
 	};
-	xhttp.open("GET", "StudentServlet?activeLessonId=" + activeLessonId, true);
+	xhttp.open("GET", "StudentServlet?date=" + date, true);
 	xhttp.send();
 }

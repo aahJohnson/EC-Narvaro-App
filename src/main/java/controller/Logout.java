@@ -8,9 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-/**
- * Servlet implementation class logout
- */
 @WebServlet("/Logout")
 public class Logout extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -18,7 +15,6 @@ public class Logout extends HttpServlet {
   
     public Logout() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 
@@ -31,7 +27,5 @@ public class Logout extends HttpServlet {
 			
 			request.getRequestDispatcher("login.jsp").forward(request, response);
 		}
-		
 	}
-
 }

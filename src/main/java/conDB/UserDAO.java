@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 import Bean.LoginBean;
 
-public class userDAO {
+public class UserDAO {
 
 	// Declaring the variables
 	static Connection con = null;

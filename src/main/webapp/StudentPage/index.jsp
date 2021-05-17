@@ -1,8 +1,8 @@
 <%@page import="Bean.LoginBean"%>
 <%@page import="java.time.LocalDate"%>
-<%@page import="Bean.NarvaroBean"%>
+<%@page import="Bean.AttendanceBean"%>
 <%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
-<%@page import="conDB.narvaroDAO"%>
+<%@page import="conDB.AttendanceDAO"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Date"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -40,46 +40,53 @@
 		<label>Kurs: <%=request.getAttribute("courseName")%></label>
 
 		<div class="attendanceButtons">
-			<label>Lektion: <%=request.getAttribute("lessonDate")%></label>
-			 <br> <label>Närvaro:
-				<button type="submit" name="attending" onclick="setAttentionPercentage(${user.users_id}, 100)">Närvaro</button>
+			<label>Lektion: <%=request.getAttribute("cookieValue")%> <br>
+				<select id="items" onchange="date(this.value)">
+					<option value="0">Välj tidigare datum</option>
+					<c:forEach items="${dateLesson }" var="date">
+						<option value="${date }">${date }</option>
+					</c:forEach>
+			</select>
 			
-				<button type="submit" name="sick"
-					onclick="setAttentionPercentage(${user.users_id}, 0)">Sjuk</button>
-
-				<button type="submit" name="absent"
-					onclick="setAttentionPercentage(${user.users_id}, 0)">Frånvarande</button>
-
-				<button type="submit" name="childcare" onclick="setAttentionPercentage(${user.users_id}, 0)">Vård av barn</button>
-					
-				<select id="items" onchange="setAttentionPercentage(${user.users_id}, this.value)">
-				<option value="0">Välj procent</option>
+			</label> <br> <label>Närvaro:
+				<button type="submit" name="attending"
+					onclick="setAttentionPercentage(${user.users_id}, 100); ">Närvaro</button>
+				<select id="items"
+				onchange="setAttentionPercentage(${user.users_id}, this.value);">
+					<option value="0">Välj procent:</option>
 					<option value="75">75%</option>
 					<option value="50">50%</option>
 					<option value="25">25%</option>
 			</select>
 
-			</label>
+				<button type="submit" name="sick"
+					onclick="setAttentionPercentage(${user.users_id}, 0); ">Sjuk</button>
 
+				<button type="submit" name="absent"
+					onclick="setAttentionPercentage(${user.users_id}, 0); ">Frånvarande</button>
+
+				<button type="submit" name="childcare"
+					onclick="setAttentionPercentage(${user.users_id}, 0); ">Vårda
+					barn</button>
+
+			</label>
 		</div>
 
 		<div class="div3">
 			<label for="items">Kurs1:</label>
 
-			<!-- The value for `for=""` and `id=""` has to be same. -->
+			<select id="items" onchange="location.reload();">
+				<option value="0">Välj kurs</option>
+				<c:forEach items="${courseNameList }" var="name">
+					<option value="${name }">${name }</option>
+				</c:forEach>
 
-			<select id="items">
-				<option value="item-0"></option>
-				<option value="item-1">Item 1</option>
-				<option value="item-2">Item 2</option>
-				<option value="item-3">Item 3</option>
-				<option value="item-4">Item 4</option>
 			</select>
 		</div>
 
-		<label>Namn: ${user.firstName } ${user.lastName } </label> <label>Total
-			Total Närvaro: <%=request.getAttribute("narvaro")%>%
-		</label> <label>Kurs Närvaro: <%=request.getAttribute("course")%>%
+		<label>Namnet:${user.firstName } ${user.lastName } </label> <label>Total
+			Närvaro:<%=request.getAttribute("totalAttention")%>%
+		</label> <label>Kurs Närvaro:<%=request.getAttribute("courseAttention")%>%
 		</label>
 
 		<table class="table table-info">
@@ -89,7 +96,7 @@
 
 					<c:forEach items="${dateLesson}" var="date">
 
-						<th scope="col">${date.getLektion().getDatum()}</th>
+						<th scope="col">${date}</th>
 
 					</c:forEach>
 
@@ -100,7 +107,8 @@
 					<th scope="row">Lektion</th>
 					<c:forEach items="${lessonAttendance }" var="attendance">
 
-						<td><button type="submit" onclick="setLessonId(1)">${attendance }%</button></td>
+						<td><button type="submit"
+								onclick="lessonAttendance(${lessonId})">${attendance }%</button></td>
 
 					</c:forEach>
 				</tr>

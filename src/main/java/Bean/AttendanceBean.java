@@ -1,6 +1,6 @@
 package Bean;
 
-public class NarvaroBean {
+public class AttendanceBean {
 	
 	private PersonBean person;
 	private LessonBean lektion;
