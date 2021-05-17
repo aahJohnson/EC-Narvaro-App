@@ -36,10 +36,10 @@
 
 	<div class="container">
 
-		<label class="activeCourse">Aktuell Kurs: <%=request.getAttribute("courseName")%></label>
+		<label class="textStyle">Aktuell Kurs: <%=request.getAttribute("courseName")%></label>
 
 		<div class="attendanceButtons">
-			<label>Lektion: <%=request.getAttribute("cookieValue")%> <br>
+			<label class="textStyle">Lektion: <%=request.getAttribute("cookieValue")%> <br>
 				<select id="items" onchange="date(this.value)">
 					<option value="0">Välj tidigare datum</option>
 					<c:forEach items="${dateLesson }" var="date">
@@ -77,18 +77,19 @@
 
 		<div class="div3">
 			<select id="items" onchange="location.reload();">
-				<option value="0">Välj kurs</option>
+				<option value="0" class="btn btn-dark">Välj kurs</option>
 				<c:forEach items="${courseNameList }" var="name">
-					<option value="${name }">${name }</option>
+					<option value="${name }" class="btn btn-dark">${name }</option>
 				</c:forEach>
 
 			</select>
 		</div>
 
-		<label>Namn: ${user.firstName } ${user.lastName } </label> <label>Total
-			Total Närvaro: <%=request.getAttribute("totalAttention")%>%
-		</label> <label>Kurs Närvaro: <%=request.getAttribute("courseAttention")%>%
-		</label>
+		<div class="name">
+		<label>Namn: ${user.firstName } ${user.lastName }</label> <br><br>
+		<label>	Total Närvaro: <%=request.getAttribute("totalAttention")%>%</label> <br>
+		<label>Kurs Närvaro: <%=request.getAttribute("courseAttention")%>%</label>
+		</div>
 
 		<table class="table">
 			<thead>
@@ -97,7 +98,7 @@
 
 					<c:forEach items="${dateLesson}" var="date">
 
-						<th scope="col">${date}</th>
+						<th scope="col" class="dates">${date}</th>
 
 					</c:forEach>
 
@@ -108,8 +109,7 @@
 					<th scope="row">Lektion</th>
 					<c:forEach items="${lessonAttendance }" var="attendance">
 
-						<td><button type="submit"
-								onclick="lessonAttendance(${lessonId})">${attendance }%</button></td>
+						<td><button type="submit" class="btn btn-secondary">${attendance }%</button></td>
 
 					</c:forEach>
 				</tr>
@@ -119,7 +119,7 @@
 
 		<form action="<%=request.getContextPath()%>/Logout" method="get">
 
-			<input type="submit" value="Logout">
+			<input type="submit" value="Logout" class="btn btn-danger">
 
 		</form>
 	</div>
@@ -132,9 +132,32 @@
 	text-align: center;
 }
 
-.activeCourse {
-	font-style: italic;
+.textStyle {
+	font-family: serif;
+	font-size: 20px;
 	margin-bottom: 20px;
+}
+
+.dates {
+	font-size: 20px;
+}
+
+.activeCourse {
+font-style: italic;
+margin-bottom: 20px;
+font-size: 20px;
+}
+
+.div3 {
+margin: 1em;
+
+}
+
+.name {
+margin: 1em;
+font-size: 20px;
+font-family: cursive;
+
 }
 
 <!-- Bootstrap -->
