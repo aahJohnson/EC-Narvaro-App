@@ -23,11 +23,10 @@
 	integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
 	crossorigin="anonymous">
 
-<link rel="stylesheet" href="StudentCSS/style.css">
-
-<link rel="stylesheet" href="StudentCSS/divStyle.css">
-
 <title>Student page</title>
+
+<script type="text/javascript" src="script.js"></script>
+
 </head>
 <body>
 
@@ -37,7 +36,7 @@
 
 	<div class="container">
 
-		<label>Kurs: <%=request.getAttribute("courseName")%></label>
+		<label class="activeCourse">Aktuell Kurs: <%=request.getAttribute("courseName")%></label>
 
 		<div class="attendanceButtons">
 			<label>Lektion: <%=request.getAttribute("cookieValue")%> <br>
@@ -47,34 +46,36 @@
 						<option value="${date }">${date }</option>
 					</c:forEach>
 			</select>
-			
-			</label> <br> <label>Närvaro:
-				<button type="submit" name="attending"
-					onclick="setAttentionPercentage(${user.users_id}, 100); ">Närvaro</button>
+
+			</label> <br>
+			<div class="btn-group">
+				<button type="submit" name="attending" class="btn btn-success"
+					onclick="setAttentionPercentage(${user.users_id}, 100); ">Närvarande</button>
 				<select id="items"
-				onchange="setAttentionPercentage(${user.users_id}, this.value);">
-					<option value="0">Välj procent:</option>
+					class="btn btn-success dropdown-toggle dropdown-toggle-split"
+					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+					onchange="setAttentionPercentage(${user.users_id}, this.value);">
+					<option></option>
 					<option value="75">75%</option>
 					<option value="50">50%</option>
 					<option value="25">25%</option>
-			</select>
+				</select>
+			</div>
 
-				<button type="submit" name="sick"
-					onclick="setAttentionPercentage(${user.users_id}, 0); ">Sjuk</button>
+			<button type="submit" name="sick" class="btn btn-danger"
+				onclick="setAttentionPercentage(${user.users_id}, 0); ">Sjuk</button>
 
-				<button type="submit" name="absent"
-					onclick="setAttentionPercentage(${user.users_id}, 0); ">Frånvarande</button>
+			<button type="submit" name="absent" class="btn btn-danger"
+				onclick="setAttentionPercentage(${user.users_id}, 0); ">Frånvarande</button>
 
-				<button type="submit" name="childcare"
-					onclick="setAttentionPercentage(${user.users_id}, 0); ">Vårda
-					barn</button>
+			<button type="submit" name="childcare" class="btn btn-danger"
+				onclick="setAttentionPercentage(${user.users_id}, 0); ">Vård
+				av barn</button>
 
-			</label>
+
 		</div>
 
 		<div class="div3">
-			<label for="items">Kurs1:</label>
-
 			<select id="items" onchange="location.reload();">
 				<option value="0">Välj kurs</option>
 				<c:forEach items="${courseNameList }" var="name">
@@ -84,12 +85,12 @@
 			</select>
 		</div>
 
-		<label>Namnet:${user.firstName } ${user.lastName } </label> <label>Total
-			Närvaro:<%=request.getAttribute("totalAttention")%>%
-		</label> <label>Kurs Närvaro:<%=request.getAttribute("courseAttention")%>%
+		<label>Namn: ${user.firstName } ${user.lastName } </label> <label>Total
+			Total Närvaro: <%=request.getAttribute("totalAttention")%>%
+		</label> <label>Kurs Närvaro: <%=request.getAttribute("courseAttention")%>%
 		</label>
 
-		<table class="table table-info">
+		<table class="table">
 			<thead>
 				<tr>
 					<th scope="col">Datum</th>
@@ -122,8 +123,68 @@
 
 		</form>
 	</div>
-
-	<script type="text/javascript" src="script.js"></script>
-
+	
 </body>
+<style>
+.container {
+	margin-top: 500px;
+	align-content : center;
+	text-align: center;
+}
+
+.activeCourse {
+	font-style: italic;
+	margin-bottom: 20px;
+}
+
+<!-- Bootstrap -->
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+
+@import url("https://fonts.googleapis.com/css?family=Open+Sans");
+
+h1 {
+	font-family: "Montserrat", sans-serif;
+}
+
+p {
+	font-family: "Open Sans", sans-serif;
+	text-align: justify;
+}
+
+.blue-bg {
+	position: fixed;
+	background-image: url("images/header.jpg");
+	background-size: cover;
+	background-color: #58aff6;
+	top: 0;
+	height: 600px;
+	width: 100vw;
+	z-index: -1;
+}
+
+.white-bg {
+	position: absolute;
+	top: 0;
+	background-image: url("images/background.jpg");
+	min-height: 500px;
+	margin: 410px 0px;
+	width: 100vw;
+	height: 100vh;
+	-webkit-transform: skewY(5deg);
+	transform: skewY(5deg);
+	z-index: -1;
+}
+
+.content {
+	position: absolute;
+	top: 0;
+	margin: 250px 10vw;
+	max-width: 60vw;
+	background-color: #fff;
+}
+
+.shadow {
+	box-shadow: -2px -5px 5px 0px rgba(0, 0, 0, 0.3);
+}
+</style>
 </html>
