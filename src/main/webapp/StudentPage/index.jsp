@@ -39,9 +39,9 @@
 		<label class="textStyle">Aktuell Kurs: <%=request.getAttribute("courseName")%></label>
 
 		<div class="attendanceButtons">
-			<label class="textStyle">Lektion: <%=request.getAttribute("cookieValue")%> <br>
-				<select id="items" onchange="date(this.value)">
-					<option value="0">Välj tidigare datum</option>
+			<label class="textStyle">Lektionsdatum: <%=request.getAttribute("cookieValue")%> <br>
+				<select id="items" onchange="date(this.value)" class="btn btn-dark">
+					<option value="0">Välj en lektion att registrera</option>
 					<c:forEach items="${dateLesson }" var="date">
 						<option value="${date }">${date }</option>
 					</c:forEach>
@@ -72,14 +72,13 @@
 				onclick="setAttentionPercentage(${user.users_id}, 0); ">Vård
 				av barn</button>
 
-
 		</div>
 
-		<div class="div3">
-			<select id="items" onchange="location.reload();">
-				<option value="0" class="btn btn-dark">Välj kurs</option>
-				<c:forEach items="${courseNameList }" var="name">
-					<option value="${name }" class="btn btn-dark">${name }</option>
+		<div class="div3" >
+			<select id="chooseCourse" onchange="chooseCourse(this.value)" class="btn btn-dark">
+				<option>Välj kurs</option>
+				<c:forEach items="${courseNameList}" var="name">
+					<option value="${name.getKursId()}" class="btn btn-dark">${name.getKursNamn()}</option>
 				</c:forEach>
 
 			</select>
@@ -133,7 +132,6 @@
 }
 
 .textStyle {
-	font-family: serif;
 	font-size: 20px;
 	margin-bottom: 20px;
 }
@@ -143,21 +141,18 @@
 }
 
 .activeCourse {
-font-style: italic;
-margin-bottom: 20px;
-font-size: 20px;
+	margin-bottom: 20px;
+	font-size: 20px;
 }
 
 .div3 {
-margin: 1em;
+	margin: 1em;
 
 }
 
 .name {
-margin: 1em;
-font-size: 20px;
-font-family: cursive;
-
+	margin: 1em;
+	font-size: 20px;
 }
 
 <!-- Bootstrap -->
@@ -178,6 +173,7 @@ p {
 	position: fixed;
 	background-image: url("images/header.jpg");
 	background-size: cover;
+	background-repeat: repeat;
 	background-color: #58aff6;
 	top: 0;
 	height: 600px;
