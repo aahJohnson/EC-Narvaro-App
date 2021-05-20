@@ -25,7 +25,7 @@
 	<div class="form-container sign-in-container">
 		<form action="<%= request.getContextPath() %>/Login" method="post">
 			<h1>Sign in</h1>
-			<span>or use your account</span>
+			<span>with your existing account</span>
 			<br>
 			<input type="email" placeholder="Email" name="email"/>
 			<input type="password" placeholder="Password" name="password"/>
@@ -38,7 +38,7 @@
 		<div class="overlay">
 			<div class="overlay-panel overlay-right">
 				<h1>Hello, Friend!</h1>
-				<p>Enter your personal details and start journey with us</p>
+				<p>Enter your personal details and start your journey with us</p>
 				<!-- <button class="ghost" id="signUp">Sign Up</button> -->
 			</div>
 		</div>
