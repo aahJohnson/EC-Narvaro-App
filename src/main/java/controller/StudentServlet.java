@@ -113,7 +113,7 @@ public class StudentServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		LoginBean login = (LoginBean) session.getAttribute("user");
 
-		double courseAttention = 1;
+		double courseAttention = 0;
 
 		double totalAttention = calcTotalParticipation(login.getUsers_id()) * 100;
 
