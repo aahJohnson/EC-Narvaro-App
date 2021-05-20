@@ -40,7 +40,7 @@ public class StudentServlet extends HttpServlet {
 			}
 		} else if (request.getParameter("date") != null) {
 			try {
-				saveCookie(request, response);
+				saveDateCookie(request, response);
 			} catch (ServletException | IOException | ParseException e) {
 				e.printStackTrace();
 			}
@@ -58,7 +58,7 @@ public class StudentServlet extends HttpServlet {
 		courseAttendance(request, response);
 		showLessonDate(request, response);
 		lessonAttendance(request, response);
-		getAttributeCookie(request, response);
+		getAttributeDateCookie(request, response);
 		getCourseNameList(request, response);
 
 		request.getRequestDispatcher("StudentPage/index.jsp").forward(request, response);
@@ -113,12 +113,18 @@ public class StudentServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		LoginBean login = (LoginBean) session.getAttribute("user");
 
+		double courseAttention = 1;
+
 		double totalAttention = calcTotalParticipation(login.getUsers_id()) * 100;
 
 		request.setAttribute("totalAttention", (int) totalAttention);
 
-		double courseAttention = calcTotalParticipationCourse(login.getUsers_id(), changeCourseId(request, response)) * 100;
+		if (changeCourseId(request, response) != null) {
 
+			courseAttention = calcTotalParticipationCourse(login.getUsers_id(), changeCourseId(request, response))
+					* 100;
+
+		}
 		request.setAttribute("courseAttention", (int) courseAttention);
 
 	}
@@ -371,7 +377,7 @@ public class StudentServlet extends HttpServlet {
 
 			try {
 
-				if (lessonMinutes.getLektion().getDatum().equals(getCookieDate(request, response))
+				if (lessonMinutes.getLektion().getDatum().equals(getDateCookie(request, response))
 						&& lessonMinutes.getPerson().getPersonId() == userId) {
 
 					attendance = lessonMinutes.getLektion().getMinuter() * attentionP / 100;
@@ -433,7 +439,7 @@ public class StudentServlet extends HttpServlet {
 
 	// Cookies
 
-	public void saveCookie(HttpServletRequest request, HttpServletResponse response)
+	public void saveDateCookie(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, ParseException {
 
 		Cookie dateCookie = new Cookie("date", request.getParameter("date"));
@@ -442,7 +448,7 @@ public class StudentServlet extends HttpServlet {
 		response.addCookie(dateCookie);
 	}
 
-	public Date getCookieDate(HttpServletRequest request, HttpServletResponse response) {
+	public Date getDateCookie(HttpServletRequest request, HttpServletResponse response) {
 
 		Cookie dateCookie[] = request.getCookies();
 
@@ -464,7 +470,7 @@ public class StudentServlet extends HttpServlet {
 		return parseDate;
 	}
 
-	public void getAttributeCookie(HttpServletRequest request, HttpServletResponse response) {
+	public void getAttributeDateCookie(HttpServletRequest request, HttpServletResponse response) {
 
 		Cookie ck[] = request.getCookies();
 
