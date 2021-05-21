@@ -3,16 +3,16 @@ package Bean;
 public class AttendanceBean {
 	
 	private PersonBean person;
-	private LessonBean lektion;
+	private LessonBean lesson;
 	private CourseBean course;
-	private int andel;
+	private int attendance;
 	
 	public int getAndel() {
-		return andel;
+		return attendance;
 	}
 
 	public void setAndel(int andel) {
-		this.andel = andel;
+		this.attendance = andel;
 	}
 
 	public PersonBean getPerson() {
@@ -24,11 +24,11 @@ public class AttendanceBean {
 	}
 	
 	public LessonBean getLektion() {
-		return lektion;
+		return lesson;
 	}
 	
 	public void setLektion(LessonBean lektion) {
-		this.lektion = lektion;
+		this.lesson = lektion;
 	}
 
 	public CourseBean getCourse() {

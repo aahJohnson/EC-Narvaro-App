@@ -17,6 +17,7 @@ public class UserDAO {
 	static ResultSet rs = null;
 	static String query = null;
 
+	// Connection to databade
 	public Connection connect() {
 
 		// variables

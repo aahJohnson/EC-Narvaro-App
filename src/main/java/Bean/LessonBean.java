@@ -1,50 +1,49 @@
 package Bean;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 public class LessonBean {
 	
-	private int lekId;
-	private Date datum;
-	private int kursId;
-	private int minuter;
+	private int lessonId;
+	private Date date;
+	private int courseId;
+	private int minutes;
 	
 
 	public int getMinuter() {
-		return minuter;
+		return minutes;
 	}
 
 	public void setMinuter(int minuter) {
-		this.minuter = minuter;
+		this.minutes = minuter;
 	}
 
 	public int getLekId() {
-		return lekId;
+		return lessonId;
 	}
 	
 	public void setLekId(int lekId) {
-		this.lekId = lekId;
+		this.lessonId = lekId;
 	}
 	
 	public Date getDatum() {
-		return datum;
+		return date;
 	}
 	
 	public void setDatum(Date datum) {
-		this.datum = datum;
+		this.date = datum;
 	}
 	
 	public int getKursId() {
-		return kursId;
+		return courseId;
 	}
 	
 	public void setKursId(int kursId) {
-		this.kursId = kursId;
+		this.courseId = kursId;
 	}
 
 	@Override
 	public String toString() {
-		return "LektionBean [lekId=" + lekId + ", datum=" + datum + ", kursId=" + kursId + ", minuter=" + minuter + "]";
+		return "LektionBean [lekId=" + lessonId + ", datum=" + date + ", kursId=" + courseId + ", minuter=" + minutes + "]";
 	}
 }

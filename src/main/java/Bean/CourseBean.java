@@ -4,49 +4,49 @@ import java.util.Date;
 
 public class CourseBean {
 	
-	private int kursId;
-	private String kursNamn;
-	private Date startDatum;
-	private Date slutDatum;
-	private int utbId;
+	private int courseId;
+	private String courseName;
+	private Date startDate;
+	private Date endDate;
+	private int educationId;
 	
 	public int getKursId() {
-		return kursId;
+		return courseId;
 	}
 	
 	public void setKursId(int kursId) {
-		this.kursId = kursId;
+		this.courseId = kursId;
 	}
 	
 	public String getKursNamn() {
-		return kursNamn;
+		return courseName;
 	}
 	
 	public void setKursNamn(String kursNamn) {
-		this.kursNamn = kursNamn;
+		this.courseName = kursNamn;
 	}
 	
 	public Date getStartDatum() {
-		return startDatum;
+		return startDate;
 	}
 	
 	public void setStartDatum(Date startDatum) {
-		this.startDatum = startDatum;
+		this.startDate = startDatum;
 	}
 	
 	public Date getSlutDatum() {
-		return slutDatum;
+		return endDate;
 	}
 	
 	public void setSlutDatum(Date slutDatum) {
-		this.slutDatum = slutDatum;
+		this.endDate = slutDatum;
 	}
 	
 	public int getUtbId() {
-		return utbId;
+		return educationId;
 	}
 	
 	public void setUtbId(int utbId) {
-		this.utbId = utbId;
+		this.educationId = utbId;
 	}
 }

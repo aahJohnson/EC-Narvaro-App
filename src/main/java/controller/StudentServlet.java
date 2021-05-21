@@ -92,7 +92,7 @@ public class StudentServlet extends HttpServlet {
 
 		AttendanceDAO attendanceDaoInstance = new AttendanceDAO();
 
-		ArrayList<CourseBean> courseList = attendanceDaoInstance.kurs();
+		ArrayList<CourseBean> courseList = attendanceDaoInstance.courseInformation();
 
 		Date date = new Date();
 
@@ -145,7 +145,7 @@ public class StudentServlet extends HttpServlet {
 
 		AttendanceDAO attendanceDaoInstance = new AttendanceDAO();
 
-		ArrayList<CourseBean> courseList = attendanceDaoInstance.kurs();
+		ArrayList<CourseBean> courseList = attendanceDaoInstance.courseInformation();
 
 		if (currentCourseId != null) {
 			for (CourseBean courseName : courseList) {
@@ -164,7 +164,7 @@ public class StudentServlet extends HttpServlet {
 
 		AttendanceDAO naDao = new AttendanceDAO();
 
-		ArrayList<CourseBean> courseList = naDao.kurs();
+		ArrayList<CourseBean> courseList = naDao.courseInformation();
 
 		ArrayList<CourseBean> saveCourseList = new ArrayList<CourseBean>();
 
@@ -180,7 +180,7 @@ public class StudentServlet extends HttpServlet {
 
 		AttendanceDAO naDao = new AttendanceDAO();
 
-		ArrayList<AttendanceBean> andel = naDao.narvaroPerson();
+		ArrayList<AttendanceBean> andel = naDao.personInformation();
 
 		Date date = new Date();
 
@@ -212,7 +212,7 @@ public class StudentServlet extends HttpServlet {
 
 		AttendanceDAO attendanceDaoInstance = new AttendanceDAO();
 
-		ArrayList<CourseBean> courseList = attendanceDaoInstance.kurs();
+		ArrayList<CourseBean> courseList = attendanceDaoInstance.courseInformation();
 
 		Date date = new Date();
 
@@ -242,7 +242,7 @@ public class StudentServlet extends HttpServlet {
 
 		AttendanceDAO naDao = new AttendanceDAO();
 
-		ArrayList<LessonBean> lessons = naDao.lektionBeans();
+		ArrayList<LessonBean> lessons = naDao.lessonInformation();
 
 		Date currentDate = new Date();
 
@@ -293,7 +293,7 @@ public class StudentServlet extends HttpServlet {
 
 		AttendanceDAO naDao = new AttendanceDAO();
 
-		ArrayList<AttendanceBean> andel = naDao.narvaroPerson();
+		ArrayList<AttendanceBean> andel = naDao.personInformation();
 
 		ArrayList<Integer> filteredLesson = new ArrayList<Integer>();
 
@@ -332,7 +332,7 @@ public class StudentServlet extends HttpServlet {
 
 		AttendanceDAO naDao = new AttendanceDAO();
 
-		ArrayList<AttendanceBean> lessonDateList = naDao.narvaroPerson();
+		ArrayList<AttendanceBean> lessonDateList = naDao.personInformation();
 
 		ArrayList<Date> filteredDate = new ArrayList<Date>();
 
@@ -369,7 +369,7 @@ public class StudentServlet extends HttpServlet {
 
 		AttendanceDAO narvaroDaoInstance = new AttendanceDAO();
 
-		ArrayList<AttendanceBean> narvaroMethod = narvaroDaoInstance.narvaroPerson();
+		ArrayList<AttendanceBean> narvaroMethod = narvaroDaoInstance.personInformation();
 
 		int attendance = 0;
 
@@ -396,7 +396,7 @@ public class StudentServlet extends HttpServlet {
 
 		AttendanceDAO naDao = new AttendanceDAO();
 
-		ArrayList<LessonBean> lessonBeanInstance = naDao.lektionBeans();
+		ArrayList<LessonBean> lessonBeanInstance = naDao.lessonInformation();
 
 		Integer id = null;
 
@@ -414,7 +414,7 @@ public class StudentServlet extends HttpServlet {
 
 		AttendanceDAO naDao = new AttendanceDAO();
 
-		ArrayList<AttendanceBean> andel = naDao.narvaroPerson();
+		ArrayList<AttendanceBean> andel = naDao.personInformation();
 
 		double totalParticipation = 0.0;
 		double totalMinutes = 0.0;
@@ -486,8 +486,6 @@ public class StudentServlet extends HttpServlet {
 	public void saveCourseIdCookie(HttpServletRequest request, HttpServletResponse response) {
 
 		Cookie ck = new Cookie("courseIdCookie", request.getParameter("courseId"));
-
-		System.out.println("courseid:" + request.getParameter("courseId"));
 
 		ck.setMaxAge(1800);
 		response.addCookie(ck);

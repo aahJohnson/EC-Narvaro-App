@@ -6,7 +6,7 @@ public class PersonBean {
 	private String firstName;
 	private String lastName;
 	private String role;
-	private int ortId;
+	private int locationId;
 	
 	
 	public int getPersonId() {
@@ -41,10 +41,10 @@ public class PersonBean {
 	}
 	
 	public int getOrtId() {
-		return ortId;
+		return locationId;
 	}
 	
 	public void setOrtId(int ortId) {
-		this.ortId = ortId;
+		this.locationId = ortId;
 	}
 }

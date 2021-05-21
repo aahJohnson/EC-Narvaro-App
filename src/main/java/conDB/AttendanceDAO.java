@@ -20,7 +20,7 @@ public class AttendanceDAO {
 	static ResultSet rs = null;
 	static String query = null;
 
-	// ADAM
+	// Connecting to database
 	public Connection connect() {
 
 		// variables
@@ -57,12 +57,11 @@ public class AttendanceDAO {
 
 	}
 
-	// HOI
-	public ArrayList<AttendanceBean> narvaroPerson() {
+	public ArrayList<AttendanceBean> personInformation() {
 
-		PersonBean perBean = null;
-		LessonBean lekBean = null;
-		CourseBean courseBean = null;
+		PersonBean personBeanInstance = null;
+		LessonBean lessonBeanInstance = null;
+		CourseBean courseBeanInstance = null;
 
 		ArrayList<AttendanceBean> list = new ArrayList<AttendanceBean>();
 
@@ -77,22 +76,22 @@ public class AttendanceDAO {
 			rs = stmt.executeQuery();
 
 			while (rs.next()) {
-				AttendanceBean narvaro = new AttendanceBean();
-				perBean = new PersonBean();
-				lekBean = new LessonBean();
-				courseBean = new CourseBean();
+				AttendanceBean attendanceBeanInstance = new AttendanceBean();
+				personBeanInstance = new PersonBean();
+				lessonBeanInstance = new LessonBean();
+				courseBeanInstance = new CourseBean();
 //				perBean.setFirstName(rs.getString("firstName"));
 //				perBean.setLastName(rs.getString("lastName"));
-				perBean.setPersonId(rs.getInt("PersonId"));
-				lekBean.setLekId(rs.getInt("LekId"));
-				lekBean.setMinuter(rs.getInt("Minuter"));
-				lekBean.setDatum(rs.getDate("Datum"));
-				lekBean.setKursId(rs.getInt("KursId"));
-				narvaro.setAndel(rs.getInt("Andel"));
+				personBeanInstance.setPersonId(rs.getInt("PersonId"));
+				lessonBeanInstance.setLekId(rs.getInt("LekId"));
+				lessonBeanInstance.setMinuter(rs.getInt("Minuter"));
+				lessonBeanInstance.setDatum(rs.getDate("Datum"));
+				lessonBeanInstance.setKursId(rs.getInt("KursId"));
+				attendanceBeanInstance.setAndel(rs.getInt("Andel"));
 				
-				narvaro.setPerson(perBean);
-				narvaro.setLektion(lekBean);
-				list.add(narvaro);
+				attendanceBeanInstance.setPerson(personBeanInstance);
+				attendanceBeanInstance.setLektion(lessonBeanInstance);
+				list.add(attendanceBeanInstance);
 
 			}
 			
@@ -109,11 +108,11 @@ public class AttendanceDAO {
 
 	}
 
-	public ArrayList<CourseBean> kurs() {
+	public ArrayList<CourseBean> courseInformation() {
 
-		ArrayList<CourseBean> listKurs = new ArrayList<CourseBean>();
+		ArrayList<CourseBean> courses = new ArrayList<CourseBean>();
 
-		CourseBean kurs = null;
+		CourseBean courseBeanInstance = null;
 
 		try {
 
@@ -124,12 +123,12 @@ public class AttendanceDAO {
 			rs = stmt.executeQuery();
 
 			while (rs.next()) {
-				kurs = new CourseBean();
-				kurs.setKursId(rs.getInt("KursId"));
-				kurs.setKursNamn(rs.getString("KursNamn"));
-				kurs.setStartDatum(rs.getDate("startDatum"));
-				kurs.setSlutDatum(rs.getDate("slutDatum"));
-				listKurs.add(kurs);
+				courseBeanInstance = new CourseBean();
+				courseBeanInstance.setKursId(rs.getInt("KursId"));
+				courseBeanInstance.setKursNamn(rs.getString("KursNamn"));
+				courseBeanInstance.setStartDatum(rs.getDate("startDatum"));
+				courseBeanInstance.setSlutDatum(rs.getDate("slutDatum"));
+				courses.add(courseBeanInstance);
 
 			}
 			
@@ -141,15 +140,15 @@ public class AttendanceDAO {
 			System.out.println("SQLState: " + e.getSQLState());
 			System.out.println("VendorError: " + e.getErrorCode());
 		}
-		return listKurs;
+		return courses;
 
 	}
 
-	public ArrayList<LessonBean> lektionBeans() {
+	public ArrayList<LessonBean> lessonInformation() {
 
 		ArrayList<LessonBean> lessons = new ArrayList<LessonBean>();
 
-		LessonBean lekBean = null;
+		LessonBean lessonBeanInstance = null;
 
 		try {
 
@@ -162,12 +161,12 @@ public class AttendanceDAO {
 			rs = stmt.executeQuery();
 
 			while (rs.next()) {
-				lekBean = new LessonBean();
-				lekBean.setDatum(rs.getDate("datum"));
-				lekBean.setKursId(rs.getInt("KursId"));
-				lekBean.setLekId(rs.getInt("lekId"));
-				lekBean.setMinuter(rs.getInt("minuter"));
-				lessons.add(lekBean);
+				lessonBeanInstance = new LessonBean();
+				lessonBeanInstance.setDatum(rs.getDate("datum"));
+				lessonBeanInstance.setKursId(rs.getInt("KursId"));
+				lessonBeanInstance.setLekId(rs.getInt("lekId"));
+				lessonBeanInstance.setMinuter(rs.getInt("minuter"));
+				lessons.add(lessonBeanInstance);
 
 			}
 			
@@ -186,8 +185,7 @@ public class AttendanceDAO {
 	
 	public LessonBean lessonId(int id) {
 		
-		LessonBean lesson = null;
-		
+		LessonBean lessonBeanInstance = null;
 		
 		try {
 			
@@ -200,29 +198,26 @@ public class AttendanceDAO {
 			rs = stmt.executeQuery();
 			
 			while(rs.next()) {
-				 lesson = new LessonBean();
+				lessonBeanInstance = new LessonBean();
 				
-				lesson.setLekId(rs.getInt("lekId"));
-				lesson.setMinuter(rs.getInt("Mintuer"));
+				lessonBeanInstance.setLekId(rs.getInt("lekId"));
+				lessonBeanInstance.setMinuter(rs.getInt("Minuter"));
 			}
 			
 			rs.close();
 			con.close();
 			
-		}catch (SQLException e) {
+		}
+		catch (SQLException e) {
 			System.out.println("SQLException: " + e.getMessage());
 			System.out.println("SQLState: " + e.getSQLState());
 			System.out.println("VendorError: " + e.getErrorCode());
 		}
-		return lesson;
 		
-		
-		
+		return lessonBeanInstance;
 	}
 	
-	
 	public boolean updateAttendance(int personId, int lessonId, int attendance) {
-		
 		
 		try {
 			
@@ -240,17 +235,12 @@ public class AttendanceDAO {
 			
 			return true;
 			
-			
 		} catch (SQLException e) {
 			System.out.println("SQLException: " + e.getMessage());
 			System.out.println("SQLState: " + e.getSQLState());
 			System.out.println("VendorError: " + e.getErrorCode());
 		}
 		
-	
 		return false;
-		
-		
 	}
-
 }
